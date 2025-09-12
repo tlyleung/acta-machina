@@ -14,6 +14,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["InterVariable", ...defaultTheme.fontFamily.sans],
+        mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
       },
     },
   },
