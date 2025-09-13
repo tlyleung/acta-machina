@@ -4,10 +4,10 @@
 }
 
 /* Hide the background of the edge label */
-.flowchart .edgeLabel rect,
-.flowchart .edgeLabel p,
-.flowchart .labelBkg {
-    background-color: transparent !important;
+.flowchart.dark .edgeLabel rect,
+.flowchart.dark .edgeLabel p,
+.flowchart.dark .labelBkg {
+    background-color: #18181b !important;
 }
 
 /* Thicker node borders (rectangles, circles, and polygons) */

@@ -12,6 +12,8 @@ module Jekyll
 
     def generate(site)
       FileUtils.mkdir_p(CACHE_DIR)
+      site.collections['notes'].docs.each { |note| process_page(note) }
+      site.collections['posts'].docs.each { |post| process_page(post) }
       site.pages.each { |page| process_page(page) }
     end
 
@@ -48,8 +50,8 @@ module Jekyll
         end
 
         # Combine the light and dark versions with proper class attributes
-        light_svg_content = File.read(light_svg).gsub(/class="flowchart"/, 'class="flowchart block dark:hidden"')
-        dark_svg_content = File.read(dark_svg).gsub(/class="flowchart"/, 'class="flowchart hidden dark:block"')
+        light_svg_content = File.read(light_svg).gsub(/class="flowchart"/, 'class="flowchart light block dark:hidden"')
+        dark_svg_content = File.read(dark_svg).gsub(/class="flowchart"/, 'class="flowchart dark hidden dark:block"')
 
         <<~HTML
           #{light_svg_content}
