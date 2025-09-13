@@ -31,6 +31,9 @@ date_format: "%-d %B %Y"
 
 # Collections
 collections:
+  notes:
+    output: true
+    permalink: /:collection/:title
   posts:
     output: true
     permalink: /:collection/:title
