@@ -63,24 +63,51 @@
 
     {%- unless page_titles == empty %}
     <nav class="flex items-center gap-1 sm:gap-3">
-      {%- for path in page_paths -%} {%- assign hyperpage = site.pages | where: "path", path | first -%} {%- if
-      hyperpage.title %}
       <span class="relative">
-        {% if hyperpage.url == page.url %}
+        {% if page.url == '/about/' %}
         <span
           class="absolute inset-x-2 -bottom-2 h-0.5 rounded-full bg-zinc-950 sm:-bottom-2.5 dark:bg-white"
           style="transform: none; transform-origin: 50% 50% 0px"
         ></span>
         {% endif %}
         <a
-          aria-current="{%- if hyperpage.url == page.url -%}page{%- endif -%}"
+          aria-current="{%- if page.url == '/about/' -%}page{%- endif -%}"
           class="relative flex min-w-0 items-center gap-3 rounded-lg p-1.5 text-left text-sm/5 text-zinc-950 hover:bg-zinc-950/5 active:bg-zinc-950/5 sm:text-base/6 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/5"
-          href="{{ hyperpage.url | relative_url }}"
+          href="/about/"
         >
-          {{ hyperpage.title | escape }}
+          About
         </a>
       </span>
-      {%- endif -%} {%- endfor %}
+      <span class="relative">
+        {% if page.url contains '/notes/' %}
+        <span
+          class="absolute inset-x-2 -bottom-2 h-0.5 rounded-full bg-zinc-950 sm:-bottom-2.5 dark:bg-white"
+          style="transform: none; transform-origin: 50% 50% 0px"
+        ></span>
+        {% endif %}
+        <a
+          aria-current="{%- if page.url contains '/notes/' -%}page{%- endif -%}"
+          class="relative flex min-w-0 items-center gap-3 rounded-lg p-1.5 text-left text-sm/5 text-zinc-950 hover:bg-zinc-950/5 active:bg-zinc-950/5 sm:text-base/6 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/5"
+          href="/notes/"
+        >
+          Notes
+        </a>
+      </span>
+      <span class="relative">
+        {% if page.url == '/' or page.url contains '/posts/' %}
+        <span
+          class="absolute inset-x-2 -bottom-2 h-0.5 rounded-full bg-zinc-950 sm:-bottom-2.5 dark:bg-white"
+          style="transform: none; transform-origin: 50% 50% 0px"
+        ></span>
+        {% endif %}
+        <a
+          aria-current="{%- if page.url == '/' or page.url contains '/posts/' -%}page{%- endif -%}"
+          class="relative flex min-w-0 items-center gap-3 rounded-lg p-1.5 text-left text-sm/5 text-zinc-950 hover:bg-zinc-950/5 active:bg-zinc-950/5 sm:text-base/6 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/5"
+          href="/"
+        >
+          Posts
+        </a>
+      </span>
     </nav>
     {%- endunless %}
   </nav>
