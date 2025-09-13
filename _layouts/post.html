@@ -2,29 +2,48 @@
 layout: base
 ---
 
-<article itemscope itemtype="http://schema.org/BlogPosting">
+<!-- prettier-ignore -->
+<article class="
+prose prose-sm sm:prose-base prose-zinc dark:prose-invert mx-auto p-4 sm:py-8
+prose-headings:font-semibold
+prose-p:before:content-none prose-p:after:content-none
+prose-a:font-normal
+prose-blockquote:my-0 prose-blockquote:px-4 prose-blockquote:py-px prose-blockquote:font-normal prose-blockquote:not-italic prose-blockquote:border-0 prose-blockquote:rounded-lg prose-blockquote:bg-zinc-950/5 dark:prose-blockquote:bg-white/5
+prose-figcaption:mb-[12px] 
+prose-pre:text-xs/5 prose-pre:sm:text-sm/6 prose-pre:bg-zinc-950/5 dark:prose-pre:bg-white/5
+prose-inline-code:whitespace-nowrap prose-inline-code:rounded-md prose-inline-code:px-1.5 prose-inline-code:py-0.5 prose-inline-code:bg-zinc-950/5 dark:prose-inline-code:bg-white/5 prose-inline-code:text-zinc-500 dark:prose-inline-code:text-zinc-400 before:prose-inline-code:content-none after:prose-inline-code:content-none
+prose-table:text-xs/5 prose-table:sm:text-sm/6
+" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
+    <p class="text-zinc-500 dark:text-zinc-400">
+      {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%}
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: date_format }}
+      </time>
+    </p>
     <h1 itemprop="name headline">{{ page.title | escape }}</h1>
-    <div>
-      {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%} {% assign pdate = page.date |
-      date_to_xmlschema %} {%- if page.modified_date %}<span>Published:</span>{% endif %}
-      <time datetime="{{ pdate }}" itemprop="datePublished"> {{ pdate | date: date_format }} </time>
-      {%- if page.modified_date -%}
-      <span>•</span>
-      <span>Updated:</span>
-      {%- assign mdate = page.modified_date | date_to_xmlschema %}
-      <time datetime="{{ mdate }}" itemprop="dateModified"> {{ mdate | date: date_format }} </time>
-      {%- endif -%} {%- if page.author %}
-      <div>
-        {%- for author in page.author %}
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <span itemprop="name">{{ author }}</span></span
-        >
-        {%- if forloop.last == false %}, {% endif -%} {% endfor %}
-      </div>
-      {%- endif %}
+    <p class="text-lg sm:text-xl text-zinc-500 dark:text-zinc-400">{{ page.description | escape }}</p>
+    <div class="flex aspect-video w-full items-center justify-center overflow-hidden rounded-md">
+      <img src="/assets/images/shared/posts.jpg" alt="Abstract painting by Aurelius Wendelken" class="object-none" style="object-position: {{ page.x }}% {{ page.y }}%;" />
     </div>
+    <p>
+      {%- if page.authors -%}
+        By
+        {% for key in page.authors %}
+          {% assign author = site.data.authors[key] %}
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            {%- if author.linkedin -%}
+            <a href="https://linkedin.com/in/{{ author.linkedin }}" itemprop="name">{{ author.name | escape }}</a>
+            {%- else -%}
+            <span itemprop="name">{{ author.name | escape }}</span>
+            {%- endif -%}  
+          </span>
+          {%- unless forloop.last -%}, {%- endunless -%}
+        {% endfor %}
+      {%- endif -%}
+    </p>
   </header>
-  <div itemprop="articleBody">{{ content }}</div>
-  <a href="{{ page.url | relative_url }}" hidden></a>
+  <div itemprop="articleBody">
+    {{ content }}
+  </div>
 </article>

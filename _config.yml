@@ -19,6 +19,7 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Acta Machina
+tagline: Machine Learning Blog
 email: timothyleung@gmail.com
 description: Machine Learning Blog
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -28,6 +29,13 @@ url: "http://actamachina.com" # the base hostname & protocol for your site, e.g.
 # Refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this.
 date_format: "%-d %B %Y"
 
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:collection/:title
+
+# Sibling Sites
 sites:
   "Acta Machina":
     font: "Inter"
@@ -42,7 +50,10 @@ sites:
 # Build settings
 plugins:
   - jekyll-feed
+  - jekyll-inline-svg
   - jekyll-postcss
+  - jekyll-seo-tag
+  - jekyll-sitemap
 
 postcss:
   cache: false

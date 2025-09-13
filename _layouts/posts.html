@@ -1,0 +1,25 @@
+---
+layout: base
+---
+
+{%- assign posts = site.posts -%} {%- if posts.size > 0 -%}
+<div class="mx-auto grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 sm:p-8 lg:max-w-screen-xl">
+  {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%} {%- for post in posts -%}
+  <a class="group block space-y-1" href="{{ post.url | relative_url }}">
+    <div class="mb-2 flex aspect-video w-full items-center justify-center overflow-hidden rounded-md">
+      <img
+        src="/assets/images/shared/posts.jpg"
+        alt="Abstract painting by Aurelius Wendelken"
+        class="transform-gpu object-none transition duration-300 ease-in-out group-hover:scale-110"
+        style="object-position: {{ post.x }}% {{ post.y }}%;"
+      />
+    </div>
+    <p class="text-xs/6 text-zinc-500 sm:text-sm/6 dark:text-zinc-400">{{ post.date | date: date_format }}</p>
+    <h1 class="text-lg/6 font-medium text-zinc-950 sm:text-xl/8 dark:text-white">{{ post.title | escape }}</h1>
+    <p class="line-clamp-3 text-sm/6 text-zinc-500 sm:text-base/6 dark:text-zinc-400">
+      {{ post.description | escape }}
+    </p>
+  </a>
+  {%- endfor -%}
+</div>
+{%- endif -%}

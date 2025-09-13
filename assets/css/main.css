@@ -7,11 +7,18 @@
 
 
 svg {
-	text {
-		fill: currentColor !important;
-	}
+    text {
+        fill: currentColor !important;
+    }
 
-	.js-line {
-		stroke: currentColor !important;
-	}
+    .js-line {
+        stroke: currentColor !important;
+    }
+}
+
+mjx-container {
+    display: inline-grid !important;
+    margin: 0 !important;
+    max-width: 100%;
+    overflow-x: auto;
 }
