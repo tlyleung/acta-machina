@@ -29,6 +29,9 @@ url: "http://actamachina.com" # the base hostname & protocol for your site, e.g.
 # Refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this.
 date_format: "%-d %B %Y"
 
+# Google Analytics
+google_analytics: G-Z91NRNGY2W
+
 # Collections
 collections:
   notes:
