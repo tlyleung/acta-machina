@@ -27,16 +27,20 @@ _Last updated: 20 August 2025_
 - [Data Assembly](#data-assembly)
 - [Model Training](#model-training)
   - [PyTorch](#model-training-pytorch)
-- Model Evaluation
+- [Model Evaluation](#model-evaluation)
   - [Responsible AI](#model-evaluation-responsible-ai)
   - [Metrics](#model-evaluation-metrics)
-- Models
+- [Model Deployment](#model-deployment)
+- [Models](#models)
   - [Supervised Learning](#models-supervised-learning)
   - [Unsupervised Learning](#models-unsupervised-learning)
   - [Reinforcement Learning](#models-reinforcement-learning)
   - [Recommender Systems](#models-recommender-systems)
   - [Ensembles](#models-ensembles)
   - [Tasks](#models-tasks)
+- [Designs](#designs)
+  - [Visual Search](#designs-visual-search)
+  - [Google Street View Blurring](#designs-google-street-view-blurring)
 
 </section>
 
@@ -261,7 +265,7 @@ Good data should:
 ### Structured Data
 
 - **Categorical:** ordinal encoding, one-hot encoding
-- **Numeric:** discretisation, min-max normalisation, z-score normalisation (when variables follow a normal distribution), log scaling (when variables follow an exponential distribution), power transform (mapping to Gaussian distribution using Yeo-Johnson or Box-Cox transforms)
+- **Numeric:** discretisation, linear scaling (when the feature is uniformly distributed across the range), z-score normalisation (when the feature is normally distributed), log scaling (when the feature distribution is heavily skewed on one side), clipping (when the feature contains extreme outliers), power transform (mapping to Gaussian distribution using Yeo-Johnson or Box-Cox transforms)
 
 ### Unstructured Data
 
@@ -503,17 +507,29 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 
   where $$\delta$$ is a threshold defining when to switch between the two behaviors.
 
-- **Kullback–Leibler (KL) Divergence** measures of how one probability distribution diverges or is different from a second, expected probability distribution. It is used for comparing probability distributions, often in generative models.
+- **Kullback–Leibler (KL) Divergence** measures how one probability distribution diverges or is different from a second, expected probability distribution. It is used for comparing probability distributions, often in generative models.
 
   $$L(y_{\text{pred}},\ y_{\text{true}})  = y_{\text{true}} \cdot (\log y_{\text{true}} - \log y_{\text{pred}})$$
 
-- **Mean Absolute Error (L1)** measures the average of the absolute differences between the predicted and actual values. It is robust to outliers and focuses on minimizing large deviations.
+- **L<sub>1</sub> Loss** measures the sum of the absolute values of the difference between the predicted and actual values.
 
-  $$l_n = \left| x_n - y_n \right|$$
+  $$l_n = \sum \left| x_n - y_n \right|$$
 
-- **Mean Squared Error (Squared L2 Norm)** measures the average squared difference between the estimated values and the actual values. It penalizes larger errors more than smaller ones.
+- **Mean Absolute Error** measures the average $$L_1$$ loss across a set of $$N$$ examples. It is robust to outliers and focuses on minimizing large deviations.
 
-  $$l_n = \left( x_n - y_n \right)^2$$
+  $$l_n = \frac{1}{N} \sum \left| x_n - y_n \right|$$
+
+- **L<sub>2</sub> Loss** measures the sum of the squared difference between the predicted and actual values.
+
+  $$l_n = \sum \left( x_n - y_n \right)^2$$
+
+- **Mean Squared Error** measures the average of L_2 losses across a set of $$N$$ examples. It penalizes larger errors more than smaller ones.
+
+  $$l_n = \frac{1}{N} \sum \left( x_n - y_n \right)^2$$
+
+- **Root Mean Squared Error** measures the square root of the mean squared error (MSE). It penalizes larger errors more than smaller ones.
+
+  $$l_n = \sqrt{ \frac{1}{N} \sum \left( x_n - y_n \right)^2 }$$
 
 - **Negative Log Likelihood (NLL)** measures the disagreement between the true labels and the predicted probability distributions, assigning a high penalty to incorrect classifications where the predicted probability was high.
 
@@ -587,6 +603,14 @@ Adds a penalty equal to the absolute value of the magnitude of the coefficients 
 ### L2 Regularisation (Ridge)
 
 Adds a penalty equal to the square of the magnitude of the coefficients to the loss function. This discourages large weights and helps in reducing overfitting without driving coefficients to exactly zero.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/search.svg width="100%" height="100%" %}</div>
+# Model Evaluation
+
+Evaluating machine learning model performance.
 
 </section>
 
@@ -844,6 +868,14 @@ Model monitoring is essential because while traditional software systems fail ex
 - **Shadow:** mirror incoming requests and route to shadow application.
 - **A/B:** route to new application depending on rules or contextual data.
 - **Interleave:** mix recommendations from A and B and see which recommendations are clicked on.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/neural-network.svg width="100%" height="100%" %}</div>
+# Models
+
+Overview of machine learning models.
 
 </section>
 
@@ -1260,6 +1292,81 @@ Representation learning focuses on encoding text into numerical representations 
 
 - **Word2Vec**: uses neural networks to learn word embeddings. E.g. Continuous Bag of Words (CBOW) and Skip-Gram models.
 - **Transformers**: deep learning models that capture long-range dependencies and contextual meaning. E.g. BERT, GPT-4.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs
+
+Reference designs for commonly-asked machine learning system design problems.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Visual Search
+
+## Machine Learning Task
+
+- **Objective:** Accurately retrieve images visually similar to a query image.
+- **Input:** Query image.
+- **Output:** Retrieved images ranked by similarity to the query image.
+- **Category:** Ranking problem.
+
+## Data Preparation
+
+- **Data Engineering:** Users, images and user-image interactions.
+- **Feature Engineering:** Resizing, scaling, normalisation and augmentation.
+
+## Model Development
+
+- **Model Selection:** CNN-based models (ResNet) or transformer-based models (ViT).
+- **Model Training:** Use contrastive learning by training the model to discriminate between similar and dissimilar images. To select the similar image, we can use human judgement, use interaction data as a proxy for similarity, or artificially create a similar image from the query image.
+- **Loss Function:** Contrastive loss: (i) compute cosine similarities between the query image and the retrieved images, (ii) apply softmax to get probabilities; and (iii) compute the cross-entropy loss between the probabilities and the ground truth labels.
+
+## Evaluation
+
+- **Offline Evaluation:** mean reciprocal rank (MRR), recall@k, precision@k, mean average precision (mAP), normalised discounted cumulative gain (nDCG).
+- **Online Evaluation:** click-through rate (CTR), average daily/weekly/monthly time spent on suggested images.
+
+## Serving
+
+- **Prediction Pipeline:** embedding generation service, nearest neighbour service (exact nearest neighbour or **approximate nearest neighbour**), re-ranking service.
+- **Indexing Pipeline:** indexing service.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Google Street View Blurring
+
+## Machine Learning Task
+
+- **Objective:** Accurately detect privacy-sensitive objects in Street View images so they can be blurred before display.
+- **Input:** Street View image.
+- **Output:** Detected objects with bounding boxes and class labels (for example, human face or license plate).
+- **Category:** Object detection problem, combining **regression** for bounding box coordinates and **classification** for object classes.
+
+## Data Preparation
+
+- **Data Engineering:** Annotated dataset of 1 million images with labeled bounding boxes for human faces and license plates, plus raw Street View images and metadata such as location, camera pitch/yaw/roll, and timestamp. 
+- **Feature Engineering:** Standard image preprocessing such as resizing and normalization, followed by image augmentation (random crop, flip, rotation/translation, affine transforms, and brightness/saturation/contrast changes). Bounding boxes must be transformed consistently with the image.
+
+## Model Development
+
+- **Model Selection:** two-stage network consisting of a region proposal network (RPN) and a classifier (e.g. Fast R-CNN, Faster R-CNN) or one-stage alternatives (e.g. YOLO, SSD) if faster inference becomes necessary.
+- **Model Training:** Train on annotated images with ground-truth bounding boxes and classes.
+- **Loss Function:** regression loss for predicted bounding boxes vs ground-truth boxes and classification loss (for example cross-entropy/log loss) for predicted object classes. Final loss is a weighted combination of classification loss and regression loss.
+
+## Evaluation
+
+-  **Offline Evaluation:** Average Precision (AP) per class and mean Average Precision (mAP) across classes, computed using IOU-based correctness thresholds. 
+- **Online Evaluation:** User reports/complaints about missed blurs, plus human spot-checking of incorrectly blurred images. 
+
+## Serving
+
+- **Prediction Pipeline:** Because latency is not critical, the system uses an offline batch prediction pipeline: (i) preprocessing; (ii) blurring service; (iii) non-maximum suppression (NMS) to remove overlapping duplicate detections; (iv) blur detected faces/license plates; and (v) store blurred images for serving.
 
 </section>
 
