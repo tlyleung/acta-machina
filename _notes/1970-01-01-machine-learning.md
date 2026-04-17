@@ -41,7 +41,14 @@ _Last updated: 20 August 2025_
 - [Designs](#designs)
   - [Visual Search](#designs-visual-search)
   - [Google Street View Blurring](#designs-google-street-view-blurring)
-
+  - [YouTube Video Search](#designs-youtube-video-search)
+  - [Harmful Content Detection](#designs-harmful-content-detection)
+  - [Video Recommendation System](#designs-video-recommendation-system)
+  - [Event Recommendation System](#designs-event-recommendation-system)
+  - [Ad Click Prediction on Social Platforms](#designs-ad-click-prediction-on-social-platforms)
+  - [Similar Listings on Vacation Rental Platforms](#designs-similar-listings-on-vacation-rental-platforms)
+  - [Personalized News Feed](#designs-personalized-news-feed)
+  - [People You May Know](#designs-people-you-may-know)
 </section>
 
 <section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
@@ -1305,30 +1312,38 @@ Reference designs for commonly-asked machine learning system design problems.
 
 <section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
-# Designs: Visual Search
+# Designs: Visual Search[^mlsystemdesign]
 
 ## Machine Learning Task
 
-- **Objective:** Accurately retrieve images visually similar to a query image.
-- **Input:** Query image.
-- **Output:** Retrieved images ranked by similarity to the query image.
-- **Category:** Ranking problem.
+- **Objective:** accurately retrieve images visually similar to a query image.
+- **Input:** query image.
+- **Output:** retrieved images ranked by similarity to the query image.
+- **Category:** ranking problem.
+
+---
 
 ## Data Preparation
 
-- **Data Engineering:** Users, images and user-image interactions.
-- **Feature Engineering:** Resizing, scaling, normalisation and augmentation.
+- **Data Engineering:** users, images and user-image interactions.
+- **Feature Engineering:** resizing, scaling, normalisation and augmentation.
+
+---
 
 ## Model Development
 
 - **Model Selection:** CNN-based models (ResNet) or transformer-based models (ViT).
-- **Model Training:** Use contrastive learning by training the model to discriminate between similar and dissimilar images. To select the similar image, we can use human judgement, use interaction data as a proxy for similarity, or artificially create a similar image from the query image.
-- **Loss Function:** Contrastive loss: (i) compute cosine similarities between the query image and the retrieved images, (ii) apply softmax to get probabilities; and (iii) compute the cross-entropy loss between the probabilities and the ground truth labels.
+- **Model Training:** use contrastive learning by training the model to discriminate between similar and dissimilar images. To select the similar image, we can use human judgement, use interaction data as a proxy for similarity, or artificially create a similar image from the query image.
+- **Loss Function:** contrastive loss: (i) compute cosine similarities between the query image and the retrieved images, (ii) apply softmax to get probabilities; and (iii) compute the cross-entropy loss between the probabilities and the ground truth labels.
+
+---
 
 ## Evaluation
 
-- **Offline Evaluation:** mean reciprocal rank (MRR), recall@k, precision@k, mean average precision (mAP), normalised discounted cumulative gain (nDCG).
-- **Online Evaluation:** click-through rate (CTR), average daily/weekly/monthly time spent on suggested images.
+- **Offline Evaluation:** Mean Reciprocal Rank (MRR), Recall@k, Precision@k, mean Average Precision (mAP), normalised Discounted Cumulative Gain (nDCG).
+- **Online Evaluation:** Click-through Rate (CTR), average daily/weekly/monthly time spent on suggested images.
+
+---
 
 ## Serving
 
@@ -1339,34 +1354,471 @@ Reference designs for commonly-asked machine learning system design problems.
 
 <section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
-# Designs: Google Street View Blurring
+# Designs: Google Street View Blurring[^mlsystemdesign]
 
 ## Machine Learning Task
 
-- **Objective:** Accurately detect privacy-sensitive objects in Street View images so they can be blurred before display.
-- **Input:** Street View image.
-- **Output:** Detected objects with bounding boxes and class labels (for example, human face or license plate).
-- **Category:** Object detection problem, combining **regression** for bounding box coordinates and **classification** for object classes.
+- **Objective:** accurately detect privacy-sensitive objects in Street View images so they can be blurred before display.
+- **Input:** street View image.
+- **Output:** detected objects with bounding boxes and class labels (for example, human face or license plate).
+- **Category:** object detection problem, combining **regression** for bounding box coordinates and **classification** for object classes.
+
+---
 
 ## Data Preparation
 
-- **Data Engineering:** Annotated dataset of 1 million images with labeled bounding boxes for human faces and license plates, plus raw Street View images and metadata such as location, camera pitch/yaw/roll, and timestamp. 
-- **Feature Engineering:** Standard image preprocessing such as resizing and normalization, followed by image augmentation (random crop, flip, rotation/translation, affine transforms, and brightness/saturation/contrast changes). Bounding boxes must be transformed consistently with the image.
+- **Data Engineering:** annotated dataset of 1 million images with labeled bounding boxes for human faces and license plates, plus raw Street View images and metadata such as location, camera pitch/yaw/roll, and timestamp. 
+- **Feature Engineering:** standard image preprocessing such as resizing and normalization, followed by image augmentation (random crop, flip, rotation/translation, affine transforms, and brightness/saturation/contrast changes).
+
+---
 
 ## Model Development
 
 - **Model Selection:** two-stage network consisting of a region proposal network (RPN) and a classifier (e.g. Fast R-CNN, Faster R-CNN) or one-stage alternatives (e.g. YOLO, SSD) if faster inference becomes necessary.
-- **Model Training:** Train on annotated images with ground-truth bounding boxes and classes.
+- **Model Training:** train on annotated images with ground-truth bounding boxes and classes.
 - **Loss Function:** regression loss for predicted bounding boxes vs ground-truth boxes and classification loss (for example cross-entropy/log loss) for predicted object classes. Final loss is a weighted combination of classification loss and regression loss.
+
+---
 
 ## Evaluation
 
 -  **Offline Evaluation:** Average Precision (AP) per class and mean Average Precision (mAP) across classes, computed using IOU-based correctness thresholds. 
-- **Online Evaluation:** User reports/complaints about missed blurs, plus human spot-checking of incorrectly blurred images. 
+- **Online Evaluation:** user reports/complaints about missed blurs, plus human spot-checking of incorrectly blurred images. 
+
+---
 
 ## Serving
 
-- **Prediction Pipeline:** Because latency is not critical, the system uses an offline batch prediction pipeline: (i) preprocessing; (ii) blurring service; (iii) non-maximum suppression (NMS) to remove overlapping duplicate detections; (iv) blur detected faces/license plates; and (v) store blurred images for serving.
+- **Prediction Pipeline:** because latency is not critical, the system uses an offline batch prediction pipeline: (i) preprocessing; (ii) blurring service; (iii) non-maximum suppression (NMS) to remove overlapping duplicate detections; (iv) blur detected faces/license plates; and (v) store blurred images for serving.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: YouTube Video Search[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** rank videos based on their relevance to a text query.
+- **Input:** text query.
+- **Output:** retrieved videos ranked by relevance to the query.
+- **Category:** ranking problem.
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** annotated dataset of 10 million ⟨video, text query⟩ pairs. 
+- **Feature Engineering:** text preprocessing (text normalization, tokenization, token-to-ID conversion) and video preprocessing (decode frames, sample frames, resize, scale, normalize, and correct color mode).
+
+---
+
+## Model Development
+
+- **Model Selection:** 
+  - **Text encoder:** statistical methods (bag of words, TF-IDF) or machine learning methods (word2vec, transformers).
+  - **Video encoder:** video-level models or frame-level models (ViT). 
+- **Model Training:** use contrastive learning to bring matched video-query pairs closer in embedding space and push unmatched pairs apart.
+- **Loss Function:** contrastive loss
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** Mean Reciprocal Rank (MRR), Recall@k, Precision@k, mean Average Precision (mAP), normalised Discounted Cumulative Gain (nDCG).
+- **Online Evaluation:** Click-through Rate (CTR), video completion rate, total watch time of search results. 
+
+---
+
+## Serving
+
+- **Prediction Pipeline**
+  - **Visual search:** encode query text, retrieve nearest video embeddings using Approximate Nearest Neighbour (ANN).
+  - **Text search:** use Elasticsearch over titles, manual tags, and auto-generated tags.
+  - **Fusing layer:** combine visual-search and text-search results using a weighted sum of relevance scores.
+  - **Re-ranking service:** apply business logic and policies before returning final results. 
+- **Indexing Pipelines**
+  - **Video indexing pipeline:** compute and store video embeddings for nearest-neighbour retrieval.
+  - **Text indexing pipeline:** index titles, manual tags, and auto-generated tags for full-text retrieval. 
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Harmful Content Detection[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** accurately predict whether a post contains harmful content so the platform can remove or demote it.
+- **Input:** a post containing text, image, video, author information, and user reactions.
+- **Output:** harm probability and per-class harmful content probabilities.
+- **Category:** multi-modal multi-task classification problem.
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** users, posts, and user-post interactions such as likes, comments, shares, reports, and appeals.
+- **Feature Engineering** 
+  - **Text features:** preprocess text and encode it with a multilingual pretrained model such as DistilBERT.
+  - **Image/video features:** preprocess and extract embeddings using pretrained image/video models.
+  - **Reaction features:** counts of likes, shares, comments, reports, plus aggregated comment embeddings.
+  - **Author features:** prior violations, total reports, profane-word rate, demographics, follower/following counts, account age.
+  - **Contextual features:** time of day and device type. 
+
+---
+
+## Model Development
+
+- **Model Selection:** neural-network-based multi-task classifier with shared layers for common feature transformation and task-specific heads for harmful classes such as violence, nudity, and hate.
+- **Model Training:** build fused features offline and store them in a feature store: use natural labels from user reports for training data; and use hand-labeled data for evaluation data.
+- **Loss Function:** binary classification loss such as cross-entropy for each task, then combine task-specific losses into an overall loss.
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** PR-AUC, ROC-AUC.
+- **Online Evaluation:** harmful impressions, valid appeals, proactive rate, user reports per harmful class, prevalence.
+
+---
+
+## Serving
+
+- **Prediction Pipeline:** harmful content detection service predicts harmful probabilities for new posts.
+- **Enforcement Pipeline:** high-confidence harmful posts should be sent to the violation enforcement service for immediate removal and user notification; while low-confidence harmful posts should be sent to the demoting service, temporarily downranked, and queued for manual review.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Video Recommendation System[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** maximize the number of relevant videos.
+- **Input:** user.
+- **Output:** ranked list of videos sorted by their relevance scores.
+- **Category:** recommendation system.
+
+---
+
+## Data Preparation
+
+- **Data Engineering** 
+  - **Videos:** ID, length, duration, tags, title, likes, views, language.
+  - **Users:** ID, username, age, gender, city, country, language, time zone.
+  - **User-video interactions:** likes, clicks, impressions, past searches.
+- **Feature Engineering:** 
+  - **Contextual information:** time of day, device, day of week.
+  - **User histoical interactions:** past searches, liked videos, watched videos, impressions.
+
+---
+
+## Model Development
+
+- **Model Selection:** hybrid filtering: (i) collaborative filtering for candidate generation; and (ii) content-based filtering for later scoring.
+- **Model Training:** construct positive user-video pairs if the user liked the video or watched at least half of it and negative user-video pairs from random irrelevant videos or explicitly disliked videos.
+- **Loss Function:** for the two-tower model, use cross-entropy loss on binary labels and for matrix factorization, use a weighted squared-loss objective over observed and unobserved entries, optimized with WALS.
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** Precision@k, mean Average Precision (mAP), diversity.
+- **Online Evaluation:** Click-through Rate (CTR), number of completed videos, total watch time, explicit user feedback.
+
+---
+
+## Serving
+
+- **Prediction Pipeline**
+  - **Candidate generation:** narrow billions of videos to thousands using ANN over video embeddings.
+  - **Scoring:** rank candidates using a richer model and video features.
+  - **Re-ranking:** apply additional criteria such as freshness, duplicates, region restrictions, misinformation checks, fairness, and clickbait filtering.
+- **Cold Start Handling:** new users rely on demographic/contextual features with two-tower networks; new videos use metadata/content features and heuristics to gather initial interactions before fine-tuning.
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Event Recommendation System[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** maximize the number of event registrations to increase ticket sales.
+- **Input:** user.
+- **Output:** top-k events ranked by relevance to the user.
+- **Category:** ranking problem, implemented as a pointwise learning-to-rank setup with binary classification. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** users, events, friendships, and user-event interactions such as impressions, registrations, and invitations. 
+- **Feature Engineering:**
+  - **Location-related features:** walk/transit/bike scores, same city/country, distance to event, distance similarity.
+  - **Time-related features:** remaining time until event, travel time, day/hour preference profiles, day/hour similarity.
+  - **Social-related features:** number of registered users, registration ratio, number of registered friends, invitation counts, whether host is a friend, prior registrations with this host.
+  - **User-related features:** age and gender.
+  - **Event-related features:** price, price similarity, event-description similarity. 
+
+---
+
+## Model Development
+
+- **Model Selection**
+  - **Logistic regression:** uses a linear combination of features to predict the probability of an event being registered.
+    - Pros: efficient training, fast inference, works well with linearly separable data, interpretable.
+    - Cons: can't solve non-linear problems, cannot learn multicollinear features.
+  - **Decision tree:** uses a tree-based model to predict the probability of an event being registered.
+    - Pros: fast training, fast inference, no data preparation, interpretable.
+    - Cons: non-optimal decision boundary, overfits easily.
+  - **Gradient-boosted decision tree (GBDT):** uses a tree-based model to predict the probability of an event being registered by iteratively adding weak learners to the model.
+    - Pros: easy data preparation, reduces variance, reduces bias, works well with structured data.
+    - Cons: many hyperparameters, performs poorly on unstructured data, unsuitable for continual learning.
+  - **Neural network (NN):** uses a neural network to predict the probability of an event being registered.
+    - Pros: continual learning, works well with unstructured data, expressive.
+    - Cons: expensive to train, quality of input is important, large training dataset is required, black-box.
+- **Model Training:**
+  - Construct training examples from user-event pairs.
+  - Label as 1 if the user registered for the event, 0 otherwise.
+  - Handle class imbalance using methods such as focal loss, class-balanced loss, or undersampling the majority class. 
+- **Loss Function:** binary cross-entropy for the neural network formulation. 
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** mean Average Precision (mAP), since relevance is binary and ranking quality matters. 
+- **Online Evaluation:** click-through rate (CTR), conversion rate, bookmark rate, revenue lift. 
+
+---
+
+## Serving
+
+- **Online Learning Pipeline:** continuously construct datasets from fresh interaction data, train/fine-tune models, evaluate them, and deploy updated models because events are constantly changing and expiring. 
+- **Prediction Pipeline**
+  - **Event filtering:** narrow down from many events to a candidate set using simple rules such as location and user-selected filters.
+  - **Ranking service:** compute features for each ⟨user, event⟩ pair, score candidates with the trained model, and return the top-k events.
+  - **Feature computation:** use static features from a feature store and dynamic features computed in real time from raw data. 
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Ad Click Prediction on Social Platforms[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** predict which ads a user is most likely to click, in order to maximize revenue.
+- **Input:** user.
+- **Output:** ads ranked by click probability.
+- **Category:** ranking problem, implemented as a pointwise learning-to-rank setup with binary classification on ⟨user, ad⟩ pairs. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** Ads, users, and user-ad interactions such as impressions, clicks, conversions, and hide actions. 
+- **Feature Engineering:**
+  - **Ad features:** ad ID, advertiser ID, campaign ID, ad group ID, image/video embeddings, category/subcategory, impression counts, click counts, advertiser/campaign engagement stats.
+  - **User features:** demographics, contextual information, clicked ads, historical engagement statistics such as ad views and click rate.
+  - **Representation methods:** embedding layers for sparse IDs, pretrained image/video encoders for creatives, text processing for category/subcategory, scaling for numeric engagement features. 
+
+---
+
+## Model Development
+
+- **Model Selection:**
+Yes — here’s a cleaned-up version with a **one-line description**, plus **pros and cons** for each model section from your notes. Based on the attached text. 
+
+- **Model Selection:**
+  - **Logistic regression:** a simple linear binary classifier that predicts click probability from a weighted sum of features.
+    - Pros: fast to train, easy to implement, strong baseline.
+    - Cons: cannot model non-linear patterns and does not capture feature interactions. 
+  - **Feature crossing + logistic regression:** a manually engineered extension of logistic regression that adds crossed features to capture some pairwise interactions.
+    - Pros: captures some second-order feature interactions, improves over plain LR when good crosses are chosen.
+    - Cons: manual and domain-knowledge-heavy, increases sparsity, and still misses more complex interactions. 
+  - **Gradient-boosted decision trees (GBDT):** a tree-ensemble model that learns non-linear decision boundaries and feature importance from structured data.
+    - Pros: interpretable and easy to understand.
+    - Cons: poor for continual learning and cannot train embedding layers for sparse categorical features. 
+  - **GBDT + logistic regression:** a hybrid approach where GBDT first creates/selects stronger features and LR uses them for final click prediction.
+    - Pros: GBDT-generated features are often more predictive and easier for LR to learn from.
+    - Cons: still weak at capturing complex interactions and too slow for fast continual learning. 
+  - **Neural network (single NN):** a deep model that takes the original feature vector directly and predicts click probability end to end.
+    - Pros: flexible, expressive, and able to learn non-linear patterns.
+    - Cons: struggles with very sparse high-dimensional inputs and has difficulty learning all pairwise interactions efficiently in this setting. 
+  - **Neural network (two-tower):** a dual-encoder architecture that separately embeds user features and ad features, then scores them by similarity.
+    - Pros: learns user and ad representations explicitly and is useful for matching-style problems.
+    - Cons: still suffers from sparse-feature issues here and is not ideal for capturing the full set of useful feature interactions in ad click prediction. 
+  - **Deep & Cross Network (DCN):** a model that combines a deep network with a cross network to automatically learn useful feature crosses.
+    - Pros: automatically captures feature interactions and is more effective than plain neural networks for this problem.
+    - Cons: the cross network only models certain interaction patterns, so performance can still be limited. 
+  - **Factorization Machines (FM):** an embedding-based model that extends linear models by explicitly learning all pairwise feature interactions.
+    - Pros: efficient for sparse data and very good at modeling pairwise feature interactions.
+    - Cons: cannot learn richer higher-order interactions as well as deep neural networks. 
+  - **Deep Factorization Machines (DeepFM):** a hybrid model that combines FM for low-order interactions with a DNN for higher-order feature learning.
+    - Pros: captures both pairwise and higher-order interactions, making it a strong choice for sparse recommendation/CTR tasks.
+    - Cons: more complex and heavier than simpler models, and adding extra stages like GBDT can hurt training, inference, and continual learning speed. 
+- **Model Training:**
+  - Construct one data point per ad impression, labelling it positive if the user clicks within time threshold (t) and negative otherwise. 
+- **Loss Function:** cross-entropy for binary classification. 
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** cross-entropy (CE), normalized cross-entropy (NCE). 
+- **Online Evaluation:** click-through rate (CTR), conversion rate, revenue lift, hide rate. 
+
+---
+
+## Serving
+
+- **Data Preparation Pipeline:** compute online and batch features and continuously generate training data from new ads and interactions.
+- **Continual Learning Pipeline:** Continuously fine-tune, validate, and deploy updated models because even short delays in learning from fresh data hurt performance. 
+- **Prediction Pipeline:** filter the pool of ads using advertiser targeting criteria such as age, gender, and country, compute click probabilities for candidate ads using static and dynamic features, and apply business logic such as increasing diversity and removing overly similar ads. 
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Similar Listings on Vacation Rental Platforms[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** accurately predict which listing a user will click next, given the listing they are currently viewing, in order to increase bookings.
+- **Input:** currently viewed listing.
+- **Output:** ranked list of similar listings.
+- **Category:** session-based recommendation problem using listing embeddings. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** users, listings, and user-listing interactions such as impressions, clicks, and bookings. 
+- **Feature Engineering:** search sessions, where each session is a sequence of clicked listing IDs followed by an eventually booked listing. 
+
+---
+
+## Model Development
+
+- **Model Selection:** a shallow neural network to learn listing embeddings. 
+- **Model Training:** learn embeddings from co-occurrences of listings in browsing sessions using a sliding window, with positive pairs from a central listing and its context listings and negative pairs from randomly sampled listings using negative sampling.
+- **Loss Function:** use cross-entropy loss with the eventually booked listing as a global positive context and hard negatives from the same region.
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** average rank of the eventually booked listing, measured by ranking listings relative to the first clicked listing in each session. 
+- **Online Evaluation:** click-through rate (CTR), session book rate. 
+---
+
+## Serving
+
+- **Training Pipeline:** fine-tune the model regularly using new listings and fresh user-listing interactions. 
+- **Indexing Pipeline:** precompute listing embeddings for all listings and store them in an index table; refresh the table when new listings or models arrive. 
+- **Prediction Pipeline:** fetch embedding for the current listing; use heuristics for unseen new listings; use approximate nearest neighbor (ANN) search to retrieve similar listings efficiently; apply user filters and constraints such as city or price filters before display.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Personalized News Feed[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** maximize a weighted engagement score of implicit reactions (such as dwell time or user clicks) and explicit reactions (such as likes, shares, or hides).
+- **Input:** user.
+- **Output:** ranked list of unseen posts sorted by engagement score.
+- **Category:** ranking problem, implemented as a pointwise learning-to-rank setup with multi-task prediction of reactions. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** users, posts, user-post interactions, and friendship data. 
+- **Feature Engineering:**
+  - **Post features:** textual content, images/videos, reaction counts, hashtags, post age.
+  - **User features:** demographics, contextual information, user-post interaction history, whether the user is mentioned.
+  - **User-author affinity features:** like/click/comment/share rates with the author, friendship length, close-friend/family indicators. 
+- **Representation Methods:** pretrained BERT for post text, pretrained image/video models such as ResNet or CLIP, lighter text methods such as TF-IDF or word2vec for hashtags, scaling for numeric counts, bucketization and one-hot encoding for post age and other categorical/time features. 
+
+---
+
+## Model Development
+
+- **Model Selection:** multi-task DNN instead of $$n$$ independent DNNs, so the model can share representations across reactions and better handle sparse reactions. 
+- **Model Extension for Passive Users:** add two implicit reactions to the list of tasks: dwell-time prediction and skip prediction.
+- **Model Training:** create positive examples from observed reactions such as likes, shares, or comments, create negative examples from impressions without that reaction, balance positive and negative samples for each binary reaction task, and for dwell time, use impression records with dwell-time labels directly.
+- **Loss Function:** binary cross-entropy for binary reaction tasks and a regression loss such as MAE, MSE, or Huber loss for dwell time. 
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** ROC-AUC for each binary reaction classifier. 
+- **Online Evaluation:** click-through rate (CTR), reaction rate, total time spent, user satisfaction rate from surveys. 
+---
+
+## Serving
+
+- **Data Preparation Pipeline:** see [Designs: Ad Click Prediction on Social Platforms](#designs-ad-click-prediction-on-social-platforms)
+- **Prediction Pipeline:**
+  - **Retrieval service:** retrieves posts that a user has not seen, or which have comments also unseen by them.
+  - **Ranking service:** ranks the retrieved posts by assigning an engagement score to each one.
+  - **Re-ranking service:** modifies the list of posts by incorporating additional logic and user filters.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: People You May Know[^mlsystemdesign]
+
+## Machine Learning Task
+
+- **Objective:** maximize the number of formed connections between users.
+- **Input:** user.
+- **Output:** ranked list of potential connections.
+- **Category:** edge prediction on a social graph, used for ranking candidate users. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** users, connections, and interaction data such as connection requests, accepted requests, searches, profile views, and reactions. 
+- **Data Standardization:** normalize educational/work fields such as school, degree, major, company, and industry, since the same attribute may appear in different textual forms. 
+- **Feature Engineering:**
+  - **User features:** demographics, number of connections/followers/following/pending requests, account age, received reactions.
+  - **User-user affinity features:** schools in common, overlapping school years, same major, companies in common, same industry.
+  - **Social affinity features:** profile visits, number of mutual connections, and time-discounted mutual connections. 
+
+---
+
+## Model Development
+
+- **Model Selection:** graph neural network (GNN), since it can process the social graph directly and produce node embeddings for users. Possible architectures mentioned include GCN, GraphSAGE, GAT, and GIT. 
+- **Model Training:**
+  - Create a snapshot of the social graph at time (t).
+  - Compute initial node features from user attributes.
+  - Compute initial edge features from affinity features.
+  - Use the graph at time (t+1) to label whether a new edge forms between user pairs. 
+- **Loss Function:** beyond the scope of this design.
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** ROC-AUC for the GNN edge-prediction model and mAP for the PYMK ranking system. 
+- **Online Evaluation:** total number of connection requests sent, total number of connection requests accepted. 
+
+---
+
+## Serving
+
+- **PYMK Generation Pipeline:**
+  - **FoF service:** generates candidate connections from 2-hop neighbors instead of the full user graph to reduce the search space.
+  - **Scoring service:** score candidates with the GNN model, storing precomputed PYMK results in a database because the social graph changes relatively slowly.
+- **Prediction Pipeline:** fetch precomputed recommendations directly when available; if missing, issue a one-time request to the generation pipeline.
 
 </section>
 
