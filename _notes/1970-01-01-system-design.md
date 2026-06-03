@@ -11,7 +11,7 @@ y: 80
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/neural-network.svg width="100%" height="100%" %}</div>
 # System Design
 
-This cheatsheet attempts to give a high-level overview of system design principles and patterns. Please [contact me](https://twitter.com/tlyleung) for corrections/omissions.
+This cheatsheet attempts to give a high-level overview of system design principles and patterns. Please [contact me](https://x.com/tlyleung) for corrections/omissions.
 
 _Last updated: 1 January 2026_
 
@@ -1085,6 +1085,145 @@ graph LR
 
 - **Bad:** download the entire video file to the client.
 - **Good:** use adaptive bitrate streaming to download the video file in chunks.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/bulb-1.svg width="100%" height="100%" %}</div>
+# Key Technologies
+
+## Databases
+
+### Relational Database (PostgreSQL)
+
+### NoSQL Database (Cassandra, DynamoDB, Redis)
+
+### Search-optimised Database (Elasticsearch)
+
+## Blob Storage (AWS S3, Azure Blob Storage, Google Cloud Storage)
+
+## API Gateway (AWS API Gateway, Azure API Management, Google Cloud API Gateway)
+
+## Load Balancer (AWS ELB, Azure Load Balancer, Google Cloud Load Balancer)
+
+## Queue (AWS SQS, Azure Queue Storage, Google Cloud Pub/Sub)
+
+## Streams (Kafka, Flink)
+
+## Distributed Lock (Redis)
+
+## Distributed Cache (Redis)
+
+## Content Delivery Network (CDN) (Cloudflare)
+
+## Orchestrator (Kubernetes)
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/bulb-1.svg width="100%" height="100%" %}</div>
+# Common Patterns
+
+## Pushing Real-time Updates
+
+## Managing Long-running Tasks
+
+## Dealing with Contention
+
+## Scaling Reads
+
+## Scaling Writes
+
+## Handling Large Blobs
+
+## Multi-Step Processes
+
+## Proximity-based Services
+
+## Pattern Selection
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/bulb-1.svg width="100%" height="100%" %}</div>
+# Amazon Web Services
+
+## Compute
+
+- **Amazon EC2:** virtual machines (resizable compute instances).
+- **AWS Lambda:** event-driven serverless functions (run code without managing servers).
+- **AWS Elastic Beanstalk:** PaaS-style app deployment/management (handles provisioning, scaling).
+- **Amazon Lightsail:** simplified VPS-style instances for small apps.
+
+## Containers & Kubernetes
+
+- **Amazon ECS:** managed container orchestration.
+- **Amazon EKS:** managed Kubernetes.
+- **AWS Fargate:** serverless compute for containers (ECS/EKS).
+- **Amazon ECR:** container image registry.
+
+## Storage
+
+- **Amazon S3:** durable object storage (buckets/objects).
+- **Amazon EBS:** block storage volumes for EC2.
+- **Amazon EFS:** managed NFS file system for Linux workloads.
+
+## Databases
+
+- **Amazon RDS:** managed relational databases (multiple engines).
+- **Amazon Aurora:** high-performance managed relational DB (MySQL/Postgres compatible).
+- **Amazon DynamoDB:** managed NoSQL key-value/document database.
+- **Amazon ElastiCache:** managed Redis/Memcached for caching.
+- **Amazon Redshift:** managed data warehouse/analytics.
+- **Amazon DocumentDB:** MongoDB-compatible document database.
+- **Amazon OpenSearch Service:** search + log analytics (Elasticsearch-compatible origins).
+- **Amazon Neptune:** graph database.
+- **Amazon Timestream:** time-series database.
+- **Amazon QLDB:** ledger database.
+- **Amazon MemoryDB for Redis:** durable Redis-compatible in-memory database.
+
+## Networking & Content Delivery
+
+- **Elastic Load Balancing (ALB/NLB/GWLB):** distribute traffic across targets.
+- **Amazon Route 53:** DNS + routing + health checks.
+- **Amazon CloudFront:** CDN for caching/edge delivery.
+
+## Security, Identity & Compliance
+
+- **AWS IAM:** users/roles/policies for access control.
+- **AWS Secrets Manager:** store/rotate secrets (DB creds, API keys).
+- **AWS Certificate Manager (ACM):** provision/manage TLS certificates.
+
+## Monitoring & Operations
+
+- **Amazon CloudWatch:** metrics, logs, alarms, dashboards.
+- **AWS CloudTrail:** audit logs for API activity.
+- **AWS Config:** resource configuration tracking/compliance rules.
+- **AWS Systems Manager (SSM):** fleet management, patching, runbooks, parameter store.
+- **AWS Service Catalog:** curated/self-service IaC templates with governance.
+- **AWS Trusted Advisor:** best-practice checks (cost, security, reliability).
+- **AWS Well-Architected Tool:** workload reviews against best practices.
+
+## Application Integration & Messaging
+
+- **Amazon SQS:** message queue.
+- **Amazon SNS:** pub/sub notifications.
+- **Amazon MQ:** managed ActiveMQ/RabbitMQ brokers.
+- **AWS Step Functions:** workflow/orchestration for distributed systems.
+- **Amazon API Gateway:** publish/manage APIs (REST/WebSocket).
+
+## Analytics & Data Engineering
+
+- **AWS Glue:** serverless ETL + data catalog.
+- **Amazon Athena:** SQL queries on data in S3.
+- **Amazon EMR:** managed Hadoop/Spark.
+- **Amazon Kinesis (Data Streams/Firehose):** streaming ingest + delivery.
+- **AWS Lake Formation:** data lake governance on S3.
+
+## AI/ML
+
+- **Amazon SageMaker:** build/train/deploy ML models.
+- **Amazon Bedrock:** build generative AI apps with foundation models.
 
 </section>
 

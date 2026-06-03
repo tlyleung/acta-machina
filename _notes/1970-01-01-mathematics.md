@@ -11,7 +11,7 @@ y: 60
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/neural-network.svg width="100%" height="100%" %}</div>
 # Mathematics
 
-This cheatsheet attempts to give a high-level overview of the mathematics used in Machine Learning. Please [contact me](https://twitter.com/tlyleung) for corrections/omissions.
+This cheatsheet attempts to give a high-level overview of the mathematics used in Machine Learning. Please [contact me](https://x.com/tlyleung) for corrections/omissions.
 
 _Last updated: 1 January 2024_
 

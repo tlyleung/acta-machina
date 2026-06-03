@@ -11,7 +11,7 @@ y: 40
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/neural-network.svg width="100%" height="100%" %}</div>
 # Machine Learning
 
-This cheatsheet attempts to give a high-level overview of the incredibly large field of Machine Learning. Please [contact me](https://twitter.com/tlyleung) for corrections/omissions.
+This cheatsheet attempts to give a high-level overview of the incredibly large field of Machine Learning. Please [contact me](https://x.com/tlyleung) for corrections/omissions.
 
 _Last updated: 20 August 2025_
 
@@ -1711,6 +1711,7 @@ Yes — here’s a cleaned-up version with a **one-line description**, plus **pr
 
 - **Offline Evaluation:** average rank of the eventually booked listing, measured by ranking listings relative to the first clicked listing in each session. 
 - **Online Evaluation:** click-through rate (CTR), session book rate. 
+
 ---
 
 ## Serving
@@ -1820,6 +1821,77 @@ Yes — here’s a cleaned-up version with a **one-line description**, plus **pr
   - **Scoring service:** score candidates with the GNN model, storing precomputed PYMK results in a database because the social graph changes relatively slowly.
 - **Prediction Pipeline:** fetch precomputed recommendations directly when available; if missing, issue a one-time request to the generation pipeline.
 
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/hierarchy-4.svg width="100%" height="100%" %}</div>
+# Designs: Customer Support Agent
+
+## Machine Learning Task
+
+- **Objective:** increase resolution rate and customer satisfaction while reducing human-agent cost.
+- **Input:** user query plus multi-turn conversation context.
+- **Output:** factual customer-service response, clarification question, recommended action, or SOP-guided solution.
+- **Category:** multi-stage agentic conversational system combining retrieval, intent understanding, policy/action decision, and response generation. 
+
+---
+
+## Data Preparation
+
+- **Data Engineering:** Business corpus, SOP workflow documents, FAQ entries, policy rules, troubleshooting guides, historical customer-service conversations, online good cases, online bad cases, and synthetic trajectories from self-play. 
+- **Knowledge Engineering:**
+
+  - **Knowledge types:** FAQs, general knowledge, and SOP solutions.
+  - **Knowledge operations:** freshness updates for new campaigns/policies and gap addition from unmatched queries.
+  - **Retrieval assets:** indexed and chunked documents for hybrid search and reranking. 
+- **Training Data Construction:**
+  - synthetic multi-turn conversations from user simulator and assistant self-play;
+  - successful golden trajectories for supervised fine-tuning;
+  - flagged bad online cases corrected for learning;
+  - query-document relevance annotations;
+  - intent-annotated conversational datasets;
+  - intent-document-action and query-document-response triplets. 
+
+---
+
+## Model Development
+
+- **Model Selection:** finetuned models for domain comprehension and serving efficiency, retrieval agent for RAG, master agent following the PEER paradigm: Plan → Execution → Expression → Reflection. 
+- **Core Components:**
+  - **Knowledge Retrieval:** query rewriting, hybrid search (dense embeddings + sparse BM25), reranking.
+  - **Intent Understanding:** multi-round context-aware intent reconstruction and clarification.
+  - **Policy Decision:** decide whether to clarify, answer directly, call tools, or delegate to subagents.
+  - **Response Generation:** grounded, empathetic, professional replies with recommended actions/buttons. 
+- **Training Pipeline:**
+  - **CPT:** continuous pre-training for domain adaptation and terminology alignment.
+  - **SFT:** supervised fine-tuning on golden trajectories.
+  - **Agentic RL:** GRPO-based reinforcement learning for preference alignment and goal achievement optimization. 
+- **Loss / Optimization Objective:** system is isolated by component and optimized through a combination of supervised learning and agentic RL using reward signals for task success, factualness, conversation consistency, and style preference.
+
+---
+
+## Evaluation
+
+- **Offline Evaluation:** relevance ranking quality, intent classification accuracy, policy accuracy, response correctness, groundedness / factual accuracy, empathy, goal achievement score, conversation consistency, style preference. 
+- **Online Evaluation:** resolution rate (RR), customer satisfaction (CSAT), response time, hallucination/safety performance. 
+
+---
+
+## Serving
+
+- **Prediction Pipeline:**
+  - **Safety & Routing:** zero-shot classifier routes to safety refusal, business inquiry, human service, or chitchat.
+  - **Retrieval Agent:** retrieves grounding knowledge with query rewriting, hybrid search, and reranking.
+  - **Master Agent:** performs multi-round intent understanding and PEER-based planning/execution.
+  - **Tool Calls:** invoke SOP agent, databases, external APIs, calculators, or other integrations as needed.
+  - **Response Generation:** produce final factual, empathetic, professional response or guided action. 
+- **Platform Architecture:**
+  - application layer for customer-service assistant and AI search;
+  - agent/tools layer for workflow orchestration, MCP tools, memory, and evaluation;
+  - model/data layer for inference/training, ETL, analytics, and knowledge-base management; and
+  - infrastructure layer for compute plus security/compliance. 
+- **Continuous Improvement Loop:** monitor RR/CSAT/latency, review good/bad cases weekly, refine models, update knowledge base for freshness and coverage gaps.
+  
 </section>
 
 [^cs229]: [CS3229: Machine Learning](https://cs229.stanford.edu/)
