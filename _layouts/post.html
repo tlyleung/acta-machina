@@ -24,7 +24,7 @@ prose-table:text-xs/5 prose-table:sm:text-sm/6
     <h1 itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="text-lg sm:text-xl text-zinc-500 dark:text-zinc-400">{{ page.description | escape }}</p>
     <div class="flex aspect-video w-full items-center justify-center overflow-hidden rounded-md">
-      <img src="/assets/images/shared/posts.jpg" alt="Abstract painting by Aurelius Wendelken" class="object-none" style="object-position: {{ page.x }}% {{ page.y }}%;" />
+      <img src="/assets/images/shared/posts.jpg" alt="Abstract painting by Aurelius Wendelken" class="object-none" style="object-position: {{ page.x }}% {{ page.y }}%;" fetchpriority="high" />
     </div>
     <p>
       {%- if page.authors -%}
