@@ -614,6 +614,119 @@ Adds a penalty equal to the square of the magnitude of the coefficients to the l
 </section>
 
 <section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/diagram-down.svg width="100%" height="100%" %}</div>
+# Loss Curves
+
+Reading the shape of the loss curve is often the fastest way to diagnose a training run.
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-ideal-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Ideal loss** shows healthy convergence. Smooth decline to a stable minimum.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-oscillating-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Oscillating loss** due to unstable updates. Lower the learning rate; clean the data.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-sharp-rise-in-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Sharp rise in loss** due to bad batch. Check for NaNs/Inf, invalid labels, and outliers.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-overfitting.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Overfitting** widens the train/val gap. Add regularization or early stopping; simplify.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-chaotic-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Chaotic loss** due to poor shuffling. Inspect the sampler and data pipeline.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-high-loss-plateau.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**High loss plateau** due to poor fit. Confirm it can overfit a tiny subset first.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-little-or-no-learning.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Little or no learning** due to broken gradient flow. Check gradients, updates, and label wiring.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-underfitting.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Underfitting** leaves loss high. Train longer or add features/capacity.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-noisy-validation-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Noisy validation loss** due to eval variance. Use a larger, fixed validation set.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-step-down-after-lr-decay.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Step down after LR decay** is expected. Should match an LR decay or unfreeze.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-periodic-loss-spikes.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Periodic loss spikes** due to a recurring pattern. Align with LR cycles or periodic data.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-validation-loss-cliff.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Validation loss cliff** due to a pipeline mismatch. Check preprocessing and leakage.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-nan-or-inf-loss.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**NaN or Inf loss** due to numerical failure. Check finiteness, overflow, and precision.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-loss-regression.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Loss regression** due to a regime change. Check LR spikes, resets, or forgetting.
+</div>
+</div>
+
+<div class="grid grid-cols-[1fr_3fr] items-center gap-4 mb-4">
+<div>{% svg /assets/images/notes/machine-learning/loss-curve-suspiciously-fast-convergence.svg class="w-full aspect-square" %}</div>
+<div markdown="1">
+**Suspiciously fast convergence** due to likely leakage. Check features and held-out data.
+</div>
+</div>
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/search.svg width="100%" height="100%" %}</div>
 # Model Evaluation
 

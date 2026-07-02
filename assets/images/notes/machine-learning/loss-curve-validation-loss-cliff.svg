@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="80 8 236 126" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-06-20T04:45:06.980233</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 192.96 
+L 419.04 192.96 
+L 419.04 0 
+L 0 0 
+z
+" class="fill-none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
+Q 199.150536 128.576586 311.404718 128.576586 
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_3">
+    <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
+Q 84.660285 74.017825 84.660285 21.695133 
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_1">
+    <path vector-effect="non-scaling-stroke" d="M 91.265492 42.904704 
+L 94.958583 47.750382 
+L 99.062018 52.751807 
+L 103.165453 57.379542 
+L 107.268888 61.661507 
+L 111.372323 65.623539 
+L 115.475758 69.289541 
+L 119.989537 73.006576 
+L 124.503316 76.419282 
+L 129.017094 79.552576 
+L 133.530873 82.429334 
+L 138.454995 85.299671 
+L 143.379117 87.914616 
+L 148.713583 90.485577 
+L 154.048048 92.809664 
+L 159.792857 95.063579 
+L 165.537666 97.085305 
+L 171.692819 99.020904 
+L 178.258315 100.851547 
+L 185.234155 102.562831 
+L 192.620338 104.144678 
+L 200.416864 105.591097 
+L 209.034078 106.960076 
+L 218.471979 108.224246 
+L 228.730566 109.364973 
+L 239.809841 110.371982 
+L 252.120146 111.269122 
+L 266.071826 112.062675 
+L 282.075222 112.748893 
+L 296.026902 113.199068 
+L 296.026902 113.199068 
+" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path vector-effect="non-scaling-stroke" d="M 91.265492 41.695274 
+L 94.958583 46.4105 
+L 98.651675 50.794092 
+L 102.75511 55.304108 
+L 106.858545 59.463086 
+L 110.96198 63.298347 
+L 115.065415 66.835089 
+L 119.16885 70.096547 
+L 123.682629 73.39172 
+L 128.196407 76.405889 
+L 132.710186 79.163016 
+L 137.634308 81.903342 
+L 142.55843 84.38975 
+L 147.892896 86.824054 
+L 153.227361 89.014969 
+L 158.97217 91.130083 
+L 165.127323 93.145213 
+L 171.282475 94.929702 
+L 177.847972 96.608595 
+L 184.823811 98.169128 
+L 192.620338 99.675655 
+L 200.827208 101.021868 
+L 208.213391 102.020013 
+L 213.547857 102.548794 
+L 217.240948 102.716866 
+L 220.113353 102.620816 
+L 222.16507 102.342595 
+L 223.806444 101.930367 
+L 225.447818 101.286296 
+L 226.678849 100.608593 
+L 227.909879 99.727786 
+L 229.14091 98.611955 
+L 230.371941 97.234748 
+L 231.602971 95.581725 
+L 233.244345 92.960119 
+L 235.296063 89.14166 
+L 239.809841 80.373763 
+L 241.451215 77.703372 
+L 243.092589 75.501497 
+L 244.32362 74.164744 
+L 245.55465 73.079143 
+L 247.196024 71.972771 
+L 248.837398 71.185377 
+L 250.478772 70.642855 
+L 252.53049 70.213809 
+L 254.992551 69.942539 
+L 258.275299 69.820332 
+L 263.609765 69.88296 
+L 282.485566 70.498867 
+L 296.026902 70.858252 
+L 296.026902 70.858252 
+" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 1.9; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p0966ffa65b">
+   <rect x="67.0464" y="13.5072" width="259.8048" height="140.8608"/>
+  </clipPath>
+ </defs>
+</svg>
