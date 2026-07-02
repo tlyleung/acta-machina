@@ -343,6 +343,10 @@ Use domain knowledge to extract and transform predictive features from raw data 
 
 - **Curse of Dimensionality:** As the number of features in a dataset increases, the volume of the feature space increases so fast that the available data becomes sparse. This makes it hard to have enough data to give meaningful results, leading to overfitting.
 
+- **Discriminative vs Generative Models:** discriminative models learn the decision boundary $$P(Y \vert X)$$ directly and usually classify more accurately; generative models learn $$P(X, Y)$$, so they can sample data and handle missing inputs but are more sensitive to model misspecification.
+
+- **Double Descent:** for heavily overparameterised models, test error follows the classic U-curve, spikes near the interpolation threshold (where the model just fits the training data), then falls again as capacity grows — so bigger models can generalise better.
+
 - **Learning Curve:** Model performance as a function of number of training examples, can be good for estimating if performance can be improved with more data
 
 - **Overfitting and Underfitting:** overfitting occurs when a model learns the training data too well and can't generalise to unseen data, while underfitting happens when a model isn't powerful enough to model the training data.
@@ -361,6 +365,8 @@ Use domain knowledge to extract and transform predictive features from raw data 
   <div>{% svg /assets/images/notes/machine-learning/classification-overfit.svg  %}</div>
   <div>{% svg /assets/images/notes/machine-learning/regression-overfit.svg  %}</div>
 </div>
+
+- **Parametric vs Non-parametric Models:** parametric models have a fixed parameter count regardless of dataset size (fast, $$O(1)$$ to serve); non-parametric models (k-NN, kernel SVM) grow with the data, fitting flexibly but scaling poorly at inference.
 
 - **Universal Approximation Theorem:** A neural network with a single hidden layer can approximate any continuous function for inputs within a specific range
 
@@ -548,6 +554,12 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 
   $$l_n = - w_{y_n} x_{n,y_n}$$
 
+- **Hinge Loss** penalises predictions inside or on the wrong side of the margin and is zero once an example is correctly classified beyond it. Used by SVMs; gives a max-margin boundary but no calibrated probabilities.
+
+  $$l_n = \max(0,\ 1 - y_n \cdot \hat{y}_n)$$
+
+- **Contrastive/Triplet Loss** shapes an embedding space so similar items are close and dissimilar ones far apart; triplet loss pulls an anchor closer to a positive than a negative by a margin. Used in retrieval and representation learning, and benefits from hard-negative mining (InfoNCE / NT-Xent scale better with large batches).
+
 ---
 
 ## Normalisation
@@ -573,7 +585,7 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 - **Adagrad:** adapts the learning rate for each parameter based on its past gradients, making frequent updates smaller and rare updates larger.
 - **Adam:** combines the benefits of momentum and RMSProp, using moving averages of both gradients and squared gradients to adapt learning rates.
 - **AdamW:** Adam with weight decay decoupled from the gradient update, so the penalty isn't rescaled by Adam's adaptive denominator; a robust default for transformers and ill-conditioned problems.
-- **Momentum:** accelerates gradients in the relevant direction by combining the current gradient with a fraction of the previous gradient, helping to avoid local minima.
+- **Momentum:** accelerates gradients in the relevant direction by combining the current gradient with a fraction of the previous gradient, helping to avoid local minima. Nesterov momentum evaluates the gradient after the momentum step (looking ahead), which reduces overshoot.
 - **RMSProp:** adjusts the learning rate for each parameter based on the moving average of squared gradients, preventing large oscillations in the update step.
 - **Stochastic Gradient Descent (SGD):** updates parameters using only a random subset of data, reducing computation per update but introducing noise to the gradient estimation.
 
@@ -585,7 +597,7 @@ Rule of thumb: start with AdamW for its robustness and reduced learning-rate tun
 
 - Enable asynchronous data loading and augmentation using `num_workers > 0` and `pin_memory = True`
 - Disable bias for convolutions before batch norms
-- Use learning rate scheduler
+- Use a learning rate scheduler: warm up early (essential for transformers and large batches), then decay — cosine when the budget is fixed, step for milestones, or ReduceLROnPlateau when the duration is uncertain
 - Use mixed precision
 - Accumulate gradients by running a few small batches before doing a backward pass
 - Saturate GPU by maxing-out batch size (downside: higher batch sizes may cause training to get stuck in local minima)
@@ -614,6 +626,10 @@ Randomly zeroes some elements of the input tensor with probability $$p$$, forcin
 ### Early Stopping
 
 Stops training when the model's performance on a validation set stops improving, preventing overfitting by stopping before the model starts memorizing noise.
+
+### Label Smoothing
+
+Replaces one-hot targets with $$1-\epsilon$$ for the true class and $$\epsilon/(K-1)$$ elsewhere, discouraging overconfidence and improving calibration ($$\epsilon = 0.1$$ is typical).
 
 ### L1 Regularisation (Lasso)
 
@@ -834,7 +850,7 @@ Reduces memory footprint and increases computation speed
 - **False-positive rate:** FP / (FP + TN), i.e. a classifier's inability to find all negative samples
 - **F1 score:** 2 × precision × recall / (precision + recall), i.e. the harmonic mean of precision and recall
 - **Precision-recall curve:** trade-off between precision and recall, a higher PR-AUC indicates a more accurate model
-- **Receiver operator characteristic (ROC) curve:** trade-off between true-positive rate (recall) and false-positive rate, a higher ROC-AUC indicates a model better at distinguishing positive and negative classes
+- **Receiver operator characteristic (ROC) curve:** trade-off between true-positive rate (recall) and false-positive rate, a higher ROC-AUC indicates a model better at distinguishing positive and negative classes; prefer PR-AUC when positives are rare, since abundant true negatives inflate ROC-AUC
 
 ### Regression
 
@@ -1153,7 +1169,7 @@ $$ \hat{y}(x) = \arg\min\_{k} ||x - \mu_k||^2 $$
 
 - K-Means Clustering partitions the data into $$K$$ clusters by assigning each point to the nearest cluster centroid and updating centroids iteratively to minimise the within-cluster sum of squares (WCSS).
 - Centroids are updated iteratively by minimising the within-cluster sum of squares (WCSS): $$WCSS = \sum_{k=1}^{K} \sum_{i \in C_k} \lVert x_i - \mu_k \rVert ^2$$, where $$\mu_k$$ is the centroid of cluster $$C_k$$.
-- Use when you know the number of clusters in advance and the clusters are roughly spherical and evenly sized; watch out for outliers, feature scaling, and initialisation.
+- Use when you know the number of clusters in advance and the clusters are roughly spherical and evenly sized; watch out for outliers, feature scaling, and initialisation. For non-convex clusters use DBSCAN; for elongated or unequal-variance clusters use a Gaussian Mixture Model (GMM), which also gives soft assignments.
 
 ### Latent Dirichlet Allocation (LDA)
 
@@ -1299,7 +1315,7 @@ Reduces model variance by training identical models in parallel on different dat
 
 ## Boosting
 
-Reduces model bias and variance by training several weak classifiers sequentially (Adaboost, XGBoost).
+Reduces model bias and variance by training several weak classifiers sequentially, each fitting the previous ensemble's residuals (Adaboost, XGBoost, LightGBM). Gradient-boosted trees usually beat random forests on tabular data but overfit without early stopping.
 
 - **Pros:** reduces bias and variance
 - **Cons:** slower training and inference
@@ -1440,13 +1456,15 @@ Representation learning focuses on encoding text into numerical representations 
 - **Multi-Head Attention (MHA):** each head has its own query, key, and value projections.
 - **Grouped-Query Attention (GQA):** query heads share a smaller set of key/value heads, shrinking parameters and KV cache with little quality loss.
 - **Multi-head Latent Attention (MLA):** compresses key/value tensors into a low-rank latent before caching, decompressing them on use.
+- **Multi-Query Attention (MQA):** the extreme of GQA — all query heads share a single key/value head, minimising KV cache at a larger quality cost.
 - **KV cache:** an inference optimisation (not an architectural variant) that caches past key/value vectors during decoding so each new token attends against them instead of recomputing; memory grows with sequence length, layers, and hidden size — which is exactly what GQA and MLA shrink.
+- **FlashAttention:** an exact attention kernel that tiles the computation and fuses operations so the $$n \times n$$ score matrix is never written to memory, cutting attention memory from $$O(n^2)$$ to $$O(n)$$ and speeding up long-context training and prefill.
 
 ---
 
 ## Positional Encoding
 
-- **Absolute:** adds a fixed or learned position vector to each token embedding.
+- **Absolute:** adds a position vector to each token embedding — learned (doesn't extrapolate past the trained length) or fixed sinusoidal (generalises somewhat further).
 - **Rotary (RoPE):** rotates query and key vectors by an angle proportional to position, encoding relative position directly in attention; extended to longer contexts by raising the rotation base frequency (ABF) or with YaRN.
 
 ---
@@ -1462,6 +1480,14 @@ Representation learning focuses on encoding text into numerical representations 
 ## Tokenization
 
 - **Byte-level BPE:** merges frequent byte pairs into subword tokens, giving a fixed vocabulary (~30k–150k) that handles any Unicode text with no out-of-vocabulary tokens.
+
+---
+
+## Sampling
+
+- **Temperature:** scales logits before softmax; <1 sharpens toward greedy, >1 flattens for more randomness.
+- **Top-k:** sample only from the k highest-probability tokens.
+- **Top-p (nucleus):** sample from the smallest set of tokens whose cumulative probability exceeds p, adapting the candidate set to the model's uncertainty.
 
 ---
 
@@ -1485,6 +1511,7 @@ After pretraining and SFT, alignment turns human preferences or rewards into gra
   $$-\log \sigma\big(\beta[\Delta_\theta - \Delta_\text{ref}]\big)$$
 
 - **GRPO (Group Relative Policy Optimization):** sample a group of responses per prompt, normalise their rewards within the group, and use the relative score as the advantage — no value model needed. Best with a scalar or verifiable reward; common for reasoning training.
+- **Reward hacking / over-optimisation:** the policy exploits blind spots in the reward model (length, formatting, sycophancy), scoring high while true quality drops. Mitigate with the KL penalty, reward-model ensembles, and by tracking human win-rate — not just reward — during training.
 
 </section>
 
