@@ -32,46 +32,12 @@ z
    <g id="patch_2">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 199.150536 128.576586 311.404718 128.576586 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="patch_3">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 84.660285 74.017825 84.660285 21.695133 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
-   </g>
-   <g id="line2d_1">
-    <path vector-effect="non-scaling-stroke" d="M 91.265492 42.904704 
-L 94.958583 47.750382 
-L 99.062018 52.751807 
-L 103.165453 57.379542 
-L 107.268888 61.661507 
-L 111.372323 65.623539 
-L 115.475758 69.289541 
-L 119.989537 73.006576 
-L 124.503316 76.419282 
-L 129.017094 79.552576 
-L 133.530873 82.429334 
-L 138.454995 85.299671 
-L 143.379117 87.914616 
-L 148.713583 90.485577 
-L 154.048048 92.809664 
-L 159.792857 95.063579 
-L 165.537666 97.085305 
-L 171.692819 99.020904 
-L 178.258315 100.851547 
-L 185.234155 102.562831 
-L 192.620338 104.144678 
-L 200.416864 105.591097 
-L 209.034078 106.960076 
-L 218.471979 108.224246 
-L 228.730566 109.364973 
-L 239.809841 110.371982 
-L 252.120146 111.269122 
-L 266.071826 112.062675 
-L 282.075222 112.748893 
-L 296.026902 113.199068 
-L 296.026902 113.199068 
-" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2; stroke-linecap: square"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="line2d_2">
     <path vector-effect="non-scaling-stroke" d="M 91.265492 41.695274 
@@ -125,7 +91,41 @@ L 263.609765 69.88296
 L 282.485566 70.498867 
 L 296.026902 70.858252 
 L 296.026902 70.858252 
-" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 1.9; stroke-linecap: square"/>
+" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_1">
+    <path vector-effect="non-scaling-stroke" d="M 91.265492 42.904704 
+L 94.958583 47.750382 
+L 99.062018 52.751807 
+L 103.165453 57.379542 
+L 107.268888 61.661507 
+L 111.372323 65.623539 
+L 115.475758 69.289541 
+L 119.989537 73.006576 
+L 124.503316 76.419282 
+L 129.017094 79.552576 
+L 133.530873 82.429334 
+L 138.454995 85.299671 
+L 143.379117 87.914616 
+L 148.713583 90.485577 
+L 154.048048 92.809664 
+L 159.792857 95.063579 
+L 165.537666 97.085305 
+L 171.692819 99.020904 
+L 178.258315 100.851547 
+L 185.234155 102.562831 
+L 192.620338 104.144678 
+L 200.416864 105.591097 
+L 209.034078 106.960076 
+L 218.471979 108.224246 
+L 228.730566 109.364973 
+L 239.809841 110.371982 
+L 252.120146 111.269122 
+L 266.071826 112.062675 
+L 282.075222 112.748893 
+L 296.026902 113.199068 
+L 296.026902 113.199068 
+" clip-path="url(#p0966ffa65b)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2.5; stroke-linecap: square"/>
    </g>
   </g>
  </g>

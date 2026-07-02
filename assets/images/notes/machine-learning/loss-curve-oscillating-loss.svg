@@ -32,12 +32,12 @@ z
    <g id="patch_2">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 199.150536 128.576586 311.404718 128.576586 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="patch_3">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 84.660285 74.017825 84.660285 21.695133 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="line2d_1">
     <path vector-effect="non-scaling-stroke" d="M 91.265492 57.368396 
@@ -292,7 +292,7 @@ L 293.818381 89.300127
 L 294.449387 89.134547 
 L 296.026902 88.33954 
 L 296.026902 88.33954 
-" clip-path="url(#p8e5bb71179)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2; stroke-linecap: square"/>
+" clip-path="url(#p8e5bb71179)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2.5; stroke-linecap: square"/>
    </g>
   </g>
  </g>

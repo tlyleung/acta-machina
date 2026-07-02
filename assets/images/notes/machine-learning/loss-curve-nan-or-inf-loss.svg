@@ -32,12 +32,12 @@ z
    <g id="patch_2">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 199.150536 128.576586 311.404718 128.576586 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="patch_3">
     <path vector-effect="non-scaling-stroke" d="M 84.660285 128.576586 
 Q 84.660285 74.017825 84.660285 21.695133 
-" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2; stroke-linecap: round"/>
+" class="fill-none stroke-zinc-200 dark:stroke-zinc-700" style="stroke-width: 2.5; stroke-linecap: round"/>
    </g>
    <g id="line2d_1">
     <path vector-effect="non-scaling-stroke" d="M 91.265492 43.646971 
@@ -68,7 +68,7 @@ L 221.590574 106.717643
 L 232.832674 107.58173 
 L 236.580041 107.826123 
 L 236.580041 107.826123 
-" clip-path="url(#pa85f1dd905)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2; stroke-linecap: square"/>
+" clip-path="url(#pa85f1dd905)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2.5; stroke-linecap: square"/>
    </g>
    <g id="line2d_2">
     <path vector-effect="non-scaling-stroke" d="M 236.580041 107.826123 
@@ -102,7 +102,7 @@ L 252.890104 30.525448
 L 253.726518 18.368889 
 L 255.00131 -1 
 L 255.00131 -1 
-" clip-path="url(#pa85f1dd905)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2; stroke-linecap: square"/>
+" clip-path="url(#pa85f1dd905)" class="fill-none stroke-zinc-500 dark:stroke-zinc-400" style="stroke-width: 2.5; stroke-linecap: square"/>
    </g>
   </g>
  </g>
