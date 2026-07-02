@@ -38,6 +38,8 @@ _Last updated: 20 August 2025_
   - [Recommender Systems](#models-recommender-systems)
   - [Ensembles](#models-ensembles)
   - [Tasks](#models-tasks)
+  - [Language Models](#models-language-models)
+  - [Alignment](#models-alignment)
 - [Designs](#designs)
   - [Visual Search](#designs-visual-search)
   - [Google Street View Blurring](#designs-google-street-view-blurring)
@@ -1405,7 +1407,7 @@ Deep learning architectures designed to synthesize realistic or stylized images 
 
 <section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
 <div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/paragraph-justified-align.svg width="100%" height="100%" %}</div>
-# Models: Language Models (TODO)
+# Models: Language Models
 
 A language model is a probability distribution over words.
 
@@ -1422,6 +1424,67 @@ Representation learning focuses on encoding text into numerical representations 
 
 - **Word2Vec**: uses neural networks to learn word embeddings. E.g. Continuous Bag of Words (CBOW) and Skip-Gram models.
 - **Transformers**: deep learning models that capture long-range dependencies and contextual meaning. E.g. BERT, GPT-4.
+
+---
+
+## Architectures
+
+- **Encoder-only (e.g. BERT):** every token attends both directions, trained by masked prediction. Good for classification, retrieval, ranking, and embeddings; watch out for cost on long inputs and pooling choices.
+- **Decoder-only (e.g. GPT):** predicts the next token from everything before it (causal attention). Good for flexible generation, code, agents, and tool use; watch out for hallucinations, slow token-by-token decoding, and KV-cache memory.
+- **Encoder–decoder (e.g. T5):** the encoder reads the input, the decoder generates while cross-attending to it. Good for translation, summarisation, and strongly conditioned generation; watch out for slow autoregressive decoding.
+
+---
+
+## Attention
+
+- **Multi-Head Attention (MHA):** each head has its own query, key, and value projections.
+- **Grouped-Query Attention (GQA):** query heads share a smaller set of key/value heads, shrinking parameters and KV cache with little quality loss.
+- **Multi-head Latent Attention (MLA):** compresses key/value tensors into a low-rank latent before caching, decompressing them on use.
+- **KV cache:** an inference optimisation (not an architectural variant) that caches past key/value vectors during decoding so each new token attends against them instead of recomputing; memory grows with sequence length, layers, and hidden size — which is exactly what GQA and MLA shrink.
+
+---
+
+## Positional Encoding
+
+- **Absolute:** adds a fixed or learned position vector to each token embedding.
+- **Rotary (RoPE):** rotates query and key vectors by an angle proportional to position, encoding relative position directly in attention; extended to longer contexts by raising the rotation base frequency (ABF) or with YaRN.
+
+---
+
+## Building Blocks
+
+- **SwiGLU:** a gated feed-forward variant that lets small negative values through (vs GELU/ReLU), usually improving quality at similar cost.
+- **Normalisation:** most modern LLMs use pre-norm RMSNorm; QK-Norm applies RMSNorm to queries and keys before RoPE for stability.
+- **Mixture of Experts (MoE):** a router sends each token to a small subset of expert feed-forward blocks (e.g. 8 of 128), scaling capacity without scaling per-token compute; a shared expert may stay always-on.
+
+---
+
+## Tokenization
+
+- **Byte-level BPE:** merges frequent byte pairs into subword tokens, giving a fixed vocabulary (~30k–150k) that handles any Unicode text with no out-of-vocabulary tokens.
+
+---
+
+## Training Pipeline
+
+- **Pretraining:** next-token prediction over trillions of tokens, often staged — general text, then higher-quality reasoning/STEM/code, then a long-context stage that raises the maximum sequence length.
+- **Post-training:** supervised fine-tuning (SFT) on demonstrations, then preference/reward optimisation for helpfulness, safety, and instruction-following.
+
+</section>
+
+<section class="relative mb-4 sm:mb-8 break-inside-avoid-column overflow-hidden rounded-md bg-zinc-950/5 p-4 dark:bg-white/5" markdown="1">
+<div class="absolute -top-2 right-4 size-16 text-zinc-200 dark:text-zinc-700">{% svg /assets/images/streamline/cog-double-3.svg width="100%" height="100%" %}</div>
+# Models: Alignment
+
+After pretraining and SFT, alignment turns human preferences or rewards into gradients on the policy, so the model prefers better responses rather than just plausible ones.
+
+- **Supervised Fine-Tuning (SFT):** imitate high-quality demonstrations with next-token loss. Teaches format and behaviour, but not which of several good answers is preferred.
+- **PPO (Proximal Policy Optimization):** train a reward model from preference pairs, sample responses, and push the policy toward high-advantage responses with a KL penalty to stay near the reference model; a separate value model provides a variance-reducing baseline.
+- **DPO (Direct Preference Optimization):** skip the reward model and RL loop, directly widening the chosen-minus-rejected log-probability gap $$\Delta = \log \pi(y^+ \mid x) - \log \pi(y^- \mid x)$$ under the policy relative to a frozen reference. Best when you have chosen/rejected pairs.
+
+  $$-\log \sigma\big(\beta[\Delta_\theta - \Delta_\text{ref}]\big)$$
+
+- **GRPO (Group Relative Policy Optimization):** sample a group of responses per prompt, normalise their rewards within the group, and use the relative score as the advantage — no value model needed. Best with a scalar or verifiable reward; common for reasoning training.
 
 </section>
 
