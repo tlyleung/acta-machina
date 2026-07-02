@@ -1871,7 +1871,8 @@ Yes — here’s a cleaned-up version with a **one-line description**, plus **pr
 ## Evaluation
 
 - **Offline Evaluation:** ROC-AUC for each binary reaction classifier. 
-- **Online Evaluation:** click-through rate (CTR), reaction rate, total time spent, user satisfaction rate from surveys. 
+- **Online Evaluation:** click-through rate (CTR), reaction rate, total time spent, user satisfaction rate from surveys.
+
 ---
 
 ## Serving
