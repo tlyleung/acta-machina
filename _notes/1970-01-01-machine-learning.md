@@ -455,13 +455,16 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 
 - **Data parallelism:** split the data across devices so that each device sees a fraction of the batch
 - **Model parallelism:** split the model across devices so that each device runs a fragment of the model
+- **Fully Sharded Data Parallelism (FSDP):** shards parameters, gradients, and optimiser state across devices, all-gathering each layer's parameters just in time and reduce-scattering gradients after the backward pass
+- **Tensor parallelism:** splits the computation within a layer (e.g. rows or columns of a large matrix) across devices, exchanging partial results
+- **Pipeline parallelism:** places consecutive groups of layers on different devices; microbatched activations flow stage to stage, with enough microbatches to reduce the pipeline "bubble"
 
 ---
 
 ## Initialisations
 
-- **Kaiming:** sets the initial weights to account for the ReLU activation function by scaling the variance based on the number of input units, preventing vanishing gradients in deep networks.
-- **Xavier:** initialises weights to keep the variance of activations uniform across layers by scaling the weights based on the number of input and output units, making it suitable for sigmoid and tanh activations.
+- **Kaiming:** sets the initial weights to account for the ReLU activation function by scaling the variance based on the number of input units, preventing vanishing gradients in deep networks. Variance: $$2 / \text{fan}_{in}$$.
+- **Xavier:** initialises weights to keep the variance of activations uniform across layers by scaling the weights based on the number of input and output units, making it suitable for sigmoid and tanh activations. Variance: $$2 / (\text{fan}_{in} + \text{fan}_{out})$$.
 
 ---
 
@@ -482,6 +485,7 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 ### Pooling Layers
 
 - **Average pool:** takes the average of values within a pooling window, preserving spatial information by smoothing feature maps.
+- **Global average pool:** averages each channel over all spatial locations, commonly used before a classifier head as it needs far fewer parameters than flattening.
 - **Max pool:** selects the maximum value within a pooling window, retaining the most prominent features while reducing dimensionality.
 - **Adaptive max pool:** adjusts the pooling window size dynamically to output a fixed-sized feature map, regardless of input size.
 - **Fractional max pool:** pools using non-integer strides, allowing for more flexible downsampling that preserves more information in deeper layers.
@@ -494,7 +498,7 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
 
 ### Transformer Layers
 
-- **Transformer:** The transformer layer is designed to handle sequential data without relying on recurrent structures. It uses a self-attention mechanism to learn relationships between different positions in the sequence, making it highly parallelisable and better suited for long-range dependencies than RNN-based models.
+- **Transformer:** The transformer layer is designed to handle sequential data without relying on recurrent structures. It uses a self-attention mechanism to learn relationships between different positions in the sequence, making it highly parallelisable and better suited for long-range dependencies than RNN-based models. Scaled dot-product attention divides the scores by $$\sqrt{d_k}$$ because dot products grow in magnitude with dimension, which would otherwise push softmax into low-gradient regions.
 - **Transformer Encoder:** The encoder is one half of the transformer architecture, which processes input sequences into a rich set of representations. It consists of multiple layers of multi-head self-attention and position-wise feed-forward networks, which allow the model to understand context across the entire sequence.
 - **Transformer Decode:** The decoder is the other half of the transformer architecture, used for tasks like sequence-to-sequence modeling (e.g., machine translation). It generates output sequences by attending to both the encoder's output and previous tokens of the output sequence, enabling it to produce context-aware predictions.
 
@@ -557,15 +561,21 @@ Use when physical/geometric distance matters, e.g. dense data, clustering.
   <div>{% svg /assets/images/notes/machine-learning/norm-instance.svg  %}</div>
 </div>
 
+- **RMSNorm:** skips mean-centering and normalises by the root-mean-square with a single learned scale; ~10–50% faster than LayerNorm and common in modern LLMs.
+- **Trade-offs:** BatchNorm needs EMA batch statistics (awkward to sync in distributed training) but can be fused into the preceding linear layer at inference; LayerNorm is preferred for transformers and small batches since it doesn't depend on batch composition.
+
 ---
 
 ## Optimisers
 
 - **Adagrad:** adapts the learning rate for each parameter based on its past gradients, making frequent updates smaller and rare updates larger.
 - **Adam:** combines the benefits of momentum and RMSProp, using moving averages of both gradients and squared gradients to adapt learning rates.
+- **AdamW:** Adam with weight decay decoupled from the gradient update, so the penalty isn't rescaled by Adam's adaptive denominator; a robust default for transformers and ill-conditioned problems.
 - **Momentum:** accelerates gradients in the relevant direction by combining the current gradient with a fraction of the previous gradient, helping to avoid local minima.
 - **RMSProp:** adjusts the learning rate for each parameter based on the moving average of squared gradients, preventing large oscillations in the update step.
 - **Stochastic Gradient Descent (SGD):** updates parameters using only a random subset of data, reducing computation per update but introducing noise to the gradient estimation.
+
+Rule of thumb: start with AdamW for its robustness and reduced learning-rate tuning; sweep SGD with momentum and a good learning-rate schedule for large-scale vision or final performance tuning.
 
 ---
 
@@ -1015,7 +1025,7 @@ $$\hat{y}(x) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \eps
 
 - Linear regression models the relationship between the target and predictors as a straight line.
 - Parameters are estimated by minimising the Residual Sum of Squares (RSS): $$RSS = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
-- Use when the relationship between features and the target is approximately linear.
+- Use when the relationship between features and the target is approximately linear; watch out for outliers, correlated features, and clearly nonlinear patterns.
 
 ### Regression Trees
 
@@ -1045,7 +1055,7 @@ $$\hat{y}(x) = \arg\max_{c \in C} \sum_{i \in N_k(x)} I(y_i = c)$$
 
 - The k-Nearest Neighbours (k-NN) algorithm assigns the class that is most frequent among the $$k$$ closest observations in the feature space.
 - No explicit training; classification is based on the majority class among the nearest neighbors using distance metrics.
-- Use when there's no assumption about the underlying distribution of the data and when simplicity is desired.
+- Use when there's no assumption about the underlying distribution of the data and when simplicity is desired; watch out for expensive inference and poor behaviour in high-dimensional spaces.
 - Algorithm can either be exact or approximate:
   - Clustering-based (e.g. HNSW): group points into clusters based on similarity, then search for neighbors only within relevant clusters, reducing the search space.
   - Locality-sensitivity hashing (LSH): uses a hash function to map similar points to the same bucket, enabling efficient approximate search in high-dimensional spaces.
@@ -1057,7 +1067,7 @@ $$\hat{y}(x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p)}}
 
 - Logistic regression models the probability that an observation belongs to a particular class, with the logistic function constraining the output between 0 and 1.
 - Parameters are estimated by Maximum Likelihood Estimation (MLE), which maximises the probability of the observed data.
-- Use when the relationship between the features and the probability of class membership is approximately linear on the log-odds scale.
+- Use when the relationship between the features and the probability of class membership is approximately linear on the log-odds scale; watch out for nonlinear decision boundaries and class imbalance.
 
 ### Linear Discriminant Analysis (LDA)
 
@@ -1073,7 +1083,7 @@ $$\hat{y}(x) = \arg\max_{c \in C} \hat{p}_{mc} \quad \text{where} \, x \in R_m$$
 
 - Classification trees split the feature space into regions where each region is assigned the most common class.
 - The tree splits are chosen to maximise information gain, using metrics such as Gini impurity or entropy.
-- Use when you need a simple, interpretable model that can handle both non-linear relationships and categorical features.
+- Use when you need a simple, interpretable model that can handle both non-linear relationships and categorical features; watch out for overfitting, unstable splits, and small leaves.
 
 ### Support Vector Classifier (SVC)
 
@@ -1081,7 +1091,7 @@ $$\hat{y}(x) = \text{sign}(w^T x + b)$$
 
 - The Support Vector Classifier (SVC) finds the hyperplane that best separates the data into classes by maximising the margin between them.
 - Parameters are estimated by solving a quadratic optimization problem to maximize the margin while allowing for some misclassification via slack variables.
-- Use when the data is complex and not linearly separable, and you need a robust classifier with regularization to avoid overfitting.
+- Use when the data is complex and not linearly separable, and you need a robust classifier with regularization to avoid overfitting; watch out for feature scaling, kernel cost, and weak probability estimates.
 
 ---
 
@@ -1141,7 +1151,7 @@ $$ \hat{y}(x) = \arg\min\_{k} ||x - \mu_k||^2 $$
 
 - K-Means Clustering partitions the data into $$K$$ clusters by assigning each point to the nearest cluster centroid and updating centroids iteratively to minimise the within-cluster sum of squares (WCSS).
 - Centroids are updated iteratively by minimising the within-cluster sum of squares (WCSS): $$WCSS = \sum_{k=1}^{K} \sum_{i \in C_k} \lVert x_i - \mu_k \rVert ^2$$, where $$\mu_k$$ is the centroid of cluster $$C_k$$.
-- Use when you know the number of clusters in advance and the clusters are roughly spherical and evenly sized.
+- Use when you know the number of clusters in advance and the clusters are roughly spherical and evenly sized; watch out for outliers, feature scaling, and initialisation.
 
 ### Latent Dirichlet Allocation (LDA)
 
