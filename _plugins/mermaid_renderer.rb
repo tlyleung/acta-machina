@@ -49,9 +49,15 @@ module Jekyll
           end
         end
 
+        # Edge-label backgrounds must match whatever the diagram sits on: the
+        # tinted note-section card, or the plain page body (posts and pages).
+        on_card = page.data['layout'] == 'note'
+        light_bg = on_card ? '#f3f3f3' : '#ffffff' # bg-zinc-950/5 over white, else body white
+        dark_bg  = on_card ? '#242426' : '#18181b' # bg-white/5 over zinc-900, else body zinc-900
+
         # Combine the light and dark versions with proper class attributes
-        light_svg_content = File.read(light_svg).gsub(/class="flowchart"/, 'class="flowchart light block dark:hidden"')
-        dark_svg_content = File.read(dark_svg).gsub(/class="flowchart"/, 'class="flowchart dark hidden dark:block"')
+        light_svg_content = blend_edge_labels(File.read(light_svg), light_bg).gsub(/class="flowchart"/, 'class="flowchart light block dark:hidden"')
+        dark_svg_content = blend_edge_labels(File.read(dark_svg), dark_bg).gsub(/class="flowchart"/, 'class="flowchart dark hidden dark:block"')
 
         <<~HTML
           #{light_svg_content}
@@ -60,6 +66,18 @@ module Jekyll
       end
     
       page.content = updated_content
+    end
+
+    # Recolour edge-label backgrounds to match whatever the diagram sits on, so
+    # the label box masks the edge line behind it yet stays invisible against the
+    # background. `bg` is that background's opaque colour, chosen at the call site
+    # (the note-card composite, or the plain page body).
+    def blend_edge_labels(svg, bg)
+      svg
+        .gsub(/(\.edgeLabel\s*\{[^}]*?background-color:\s*)[^;}]+/, "\\1#{bg}")
+        .gsub(/(\.edgeLabel p\s*\{[^}]*?background-color:\s*)[^;}]+/, "\\1#{bg}")
+        .gsub(/(\.labelBkg\s*\{[^}]*?background-color:\s*)[^;}]+/, "\\1#{bg}")
+        .gsub(/(\.edgeLabel rect\s*\{[^}]*?)fill:\s*[^;}]+/, "\\1fill:#{bg}")
     end
 
     def render_mermaid_to_svg(mermaid_code, theme)
