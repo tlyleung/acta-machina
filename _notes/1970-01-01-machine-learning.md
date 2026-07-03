@@ -1882,9 +1882,6 @@ Reference designs for commonly-asked machine learning system design problems.
 ## Model Development
 
 - **Model Selection:**
-Yes — here’s a cleaned-up version with a **one-line description**, plus **pros and cons** for each model section from your notes. Based on the attached text. 
-
-- **Model Selection:**
   - **Logistic regression:** a simple linear binary classifier that predicts click probability from a weighted sum of features.
     - Pros: fast to train, easy to implement, strong baseline.
     - Cons: cannot model non-linear patterns and does not capture feature interactions. 
